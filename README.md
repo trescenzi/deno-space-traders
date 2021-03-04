@@ -18,7 +18,7 @@ A command line app for interacting with [spacetraders](spacetraders.io)
 ## Todo
 
 - [ ] Implement whole API
-  - [ ] View Ships
+  - [x] View Ships
   - [ ] Purchase Ships
   - [ ] Purchase Fuel
   - [ ] Find Asteroids
