@@ -27,3 +27,4 @@ A command line app for interacting with [spacetraders](spacetraders.io)
   - [ ] Purchase Goods
   - [ ] Sell Goods
 - [ ] Use Moo to provide better console input
+- [ ] Improve output(not just stringified objects)
