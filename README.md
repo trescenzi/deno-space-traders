@@ -20,7 +20,7 @@ A command line app for interacting with [spacetraders](spacetraders.io)
 - [ ] Implement whole API
   - [x] View Ships
   - [x] Purchase Ships
-  - [ ] Purchase Fuel
+  - [x] Purchase Fuel
   - [ ] Find Asteroids
   - [ ] Create Flight Plan
   - [ ] View Flight Plan
@@ -28,3 +28,4 @@ A command line app for interacting with [spacetraders](spacetraders.io)
   - [ ] Sell Goods
 - [ ] Use Moo to provide better console input
 - [ ] Improve output(not just stringified objects)
+- [ ] Use Ink to make it pretty

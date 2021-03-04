@@ -2,12 +2,13 @@ import {
 // Checkbox,
   Confirm,
   Input,
-//  Number,
+  Number,
+  Select,
   prompt,
 } from "https://deno.land/x/cliffy/prompt/mod.ts";
 import {text } from 'https://x.nest.land/deno-figlet@0.0.5/mod.js'
 import {isOnline} from './src/status.ts';
-import {getUser, createUser, NewUser, User, SpaceTraderUser} from './src/user.ts';
+import {getUser, createUser, NewUser, User, SpaceTraderUser, GoodType} from './src/user.ts';
 import {listLoans, LoanType} from './src/loan.ts';
 import {listShips, ShipClass, Ship} from './src/ships.ts';
 
@@ -41,13 +42,46 @@ async function help() {
   console.log('Take Out <loan type> — take out a type of loan');
   console.log('User — display user information');
   console.log('find ships <ship class> — display available ship information');
+  console.log('buy ship — enter ship buying ui');
+  console.log('buy good — enter good buying ui');
   console.log('exit — exit the game');
 }
 
+function displayShips(ships: Ship[]): void {
+  ships.forEach(({
+    purchaseLocations,
+    ...rest
+  }) => {
+    console.log(rest);
+    console.log(purchaseLocations);
+  });
+}
+
+function enumToSelectPromptOptions(values: string[]): {name: string, value: string}[] {
+  return values.map(k => ({name: k.toLowerCase(), value: k}));
+}
+
 async function promptBuyShip(user: User) : Promise<SpaceTraderUser> {
+  console.log('For reference ships available:');
+  const shipClasses = Object.values(ShipClass);
+  for(const shipClass of shipClasses) {
+    displayShips(await listShips(shipClass as ShipClass, user.token));
+  }
   const shipType = (await Input.prompt('What type of ship would you like to buy?')).toUpperCase();
   const location = (await Input.prompt('Where would you like to buy it?')).toUpperCase();
   return user.buyShip(shipType, location);
+}
+
+async function promptBuyGood(user: User): Promise<SpaceTraderUser> {
+  console.log('For reference your user is');
+  console.log(await user.toString());
+  const shipId: string = (await Input.prompt(`Please enter the ship id you'd like to load`));
+  const good: string = await Select.prompt({
+    message: 'What would you like to buy?',
+    options: enumToSelectPromptOptions(Object.values(GoodType))
+  });
+  const quantity: number = await Number.prompt('How much would you like to buy?');
+  return user.purchase(shipId, good as GoodType, quantity);
 }
 async function gameLoop(user: User) : Promise<string> {
   // TODO use Moo to lex the input
@@ -67,6 +101,10 @@ async function gameLoop(user: User) : Promise<string> {
       return input;
     case 'buy ship':
       console.log(await promptBuyShip(user));
+      return input;
+    case 'buy good':
+    case 'buy fuel':
+      console.log(await promptBuyGood(user));
       return input;
   }
   if (input.startsWith('take out ')) {
@@ -89,13 +127,7 @@ async function gameLoop(user: User) : Promise<string> {
       console.log('Ship type must be MK-I');
     } else {
       const ships = await listShips(type as ShipClass, user.token)
-      ships.forEach(({
-        purchaseLocations,
-        ...rest
-      }: Ship) => {
-        console.log(rest);
-        console.log(purchaseLocations);
-      });
+      displayShips(ships);
     }
   }
   return input;

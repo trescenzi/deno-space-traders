@@ -22,6 +22,10 @@ export interface SpaceTraderUser {
   username: string
 }
 
+export enum GoodType {
+  FUEL = 'FUEL'
+}
+
 export async function createUser(userName: string): Promise<NewUser> {
   const res = await post(`users/${userName}/token`);
   const json = await res.json();
@@ -53,6 +57,15 @@ export async function buyShip(userName: string, token: string, type: string, loc
   return json;
 }
 
+export async function buyGood(userName: string, token: string, shipId: string, good: GoodType, quantity: number): Promise<SpaceTraderUser> {
+  const res = await post(`users/${userName}/purchase-orders`, {shipId, good, quantity}, token);
+  const json = await res.json();
+  if (json.error) {
+    throw new Error(json.error);
+  }
+  return json;
+}
+
 export class User {
   private userName: string;
   private _token: string;
@@ -76,6 +89,11 @@ export class User {
 
   async toString() : Promise<string> {
     return this.user.then(u => JSON.stringify(u));
+  }
+
+  async purchase(ship: string, good: GoodType, quantity: number): Promise<SpaceTraderUser> {
+    this.user = buyGood(this.userName, this.token, ship, good, quantity);
+    return this.user;
   }
 
   get token() {
