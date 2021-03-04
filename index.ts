@@ -9,6 +9,7 @@ import {text } from 'https://x.nest.land/deno-figlet@0.0.5/mod.js'
 import {isOnline} from './src/status.ts';
 import {getUser, takeoutLoan, createUser, NewUser} from './src/user.ts';
 import {listLoans, LoanType} from './src/loan.ts';
+import {listShips, ShipClass, Ship} from './src/ships.ts';
 
 const awesomeText = (str: string) => text(str, 'starwars');
 
@@ -38,6 +39,8 @@ async function help() {
   console.log('Find Loans — lists loans that are available to take out');
   console.log('Take Out <loan type> — take out a type of loan');
   console.log('User — display user information');
+  console.log('find ships <ship class> — display available ship information');
+  console.log('exit — exit the game');
 }
 
 async function gameLoop(user: string, token: string) : Promise<string> {
@@ -67,6 +70,22 @@ async function gameLoop(user: string, token: string) : Promise<string> {
       console.log(`Success! You took out a new ${type} loan`);
     } catch (e) {
       console.log('Uhoh something went wrong taking out your loan');
+    }
+  }
+
+  if (input.startsWith('find ships ')) {
+    const type = input.slice(11).toUpperCase();;
+    if (type !== 'MK-I') {
+      console.log('Ship type must be MK-I');
+    } else {
+      const ships = await listShips(type as ShipClass, token)
+      ships.forEach(({
+        purchaseLocations,
+        ...rest
+      }: Ship) => {
+        console.log(rest);
+        console.log(purchaseLocations);
+      });
     }
   }
   return input;
