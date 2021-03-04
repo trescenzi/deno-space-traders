@@ -1,5 +1,6 @@
 import {LoanType, UserLoan} from './loan.ts';
 import {post, get} from './api.ts';
+import {ShipClass} from './ships.ts';
 
 export interface NewUser {
   token: string,
@@ -14,7 +15,7 @@ export interface NewUser {
   }
 };
 
-interface User {
+export interface SpaceTraderUser {
   credits: number,
   loans: [UserLoan],
   ships: [any],
@@ -28,17 +29,56 @@ export async function createUser(userName: string): Promise<NewUser> {
   return json;
 }
 
-export async function getUser(userName: string, token: string): Promise<User> {
+export async function getUser(userName: string, token: string): Promise<SpaceTraderUser> {
   const res = await get(`users/${userName}?token=${token}`);
   const json = await res.json();
   return json;
 }
 
-export async function takeoutLoan(userName: string, token: string, type: LoanType): Promise<User> {
+export async function takeoutLoan(userName: string, token: string, type: LoanType): Promise<SpaceTraderUser> {
   const res = await post(`users/${userName}/loans`, {type}, token);
   const json = await res.json();
   if (json.error) {
     throw new Error(json.error);
   }
   return json;
+}
+
+export async function buyShip(userName: string, token: string, type: string, location: string): Promise<SpaceTraderUser> {
+  const res = await post(`users/${userName}/ships`, {type, location}, token);
+  const json = await res.json();
+  if (json.error) {
+    throw new Error(json.error);
+  }
+  return json;
+}
+
+export class User {
+  private userName: string;
+  private _token: string;
+  private user: Promise<SpaceTraderUser>;
+
+  constructor(token: string, userName: string) {
+    this.userName = userName;
+    this._token = token;
+    this.user = getUser(userName, token);
+  }
+
+  async buyShip(type: string, location: string): Promise<SpaceTraderUser> {
+    this.user = buyShip(this.userName, this.token, type, location);
+    return this.user;
+  }
+
+  async takeoutLoan(type: LoanType): Promise<SpaceTraderUser> {
+    this.user = takeoutLoan(this.userName, this.token, type)
+    return this.user;
+  }
+
+  async toString() : Promise<string> {
+    return this.user.then(u => JSON.stringify(u));
+  }
+
+  get token() {
+    return this._token;
+  }
 }

@@ -19,7 +19,7 @@ A command line app for interacting with [spacetraders](spacetraders.io)
 
 - [ ] Implement whole API
   - [x] View Ships
-  - [ ] Purchase Ships
+  - [x] Purchase Ships
   - [ ] Purchase Fuel
   - [ ] Find Asteroids
   - [ ] Create Flight Plan
