@@ -1,11 +1,12 @@
-export async function isOnline(): Promise<boolean> {
-  const res = await fetch('https://api.spacetraders.io/game/status');
-  const json = await res.json();
-  return json.status === 'spacetraders is currently online and available to play';
-}
+import {get} from './api.ts';
 
 export async function status(): Promise<string> {
-  const res = await fetch('https://api.spacetraders.io/game/status');
+  const res = await get('game/status');
   const {status}: {status: string} = await res.json();
   return status;
+}
+
+export async function isOnline(): Promise<boolean> {
+  const s = await status();
+  return s === 'spacetraders is currently online and available to play';
 }

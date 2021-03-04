@@ -1,3 +1,5 @@
+import {get} from './api.ts';
+
 export enum LoanType {
   STARTUP = 'STARTUP',
   ENTERPRISE = 'ENTERPRISE',
@@ -24,7 +26,7 @@ export interface UserLoan {
 }
 
 export async function listLoans(token: string): Promise<[Loan]> {
-  const res = await fetch(`https://api.spacetraders.io/game/loans?token=${token}`);
+  const res = await get(`game/loans?token=${token}`);
   const json = await res.json();
   return json.loans;
 }
