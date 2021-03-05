@@ -9,15 +9,9 @@ A command line app for interacting with [spacetraders](spacetraders.io)
 - Install [deno](https://deno.land/)
 - `deno run --unstable --allow-net index.ts`
 
-## Currently supports:
-
-- Creating a new user
-- Finding a loan
-- Taking out a loan
-
 ## Todo
 
-- [ ] Implement whole API
+- [x] Implement whole API
   - [x] View Ships
   - [x] Purchase Ships
   - [x] Purchase Fuel
