@@ -21,11 +21,11 @@ A command line app for interacting with [spacetraders](spacetraders.io)
   - [x] View Ships
   - [x] Purchase Ships
   - [x] Purchase Fuel
-  - [ ] Find Asteroids
-  - [ ] Create Flight Plan
-  - [ ] View Flight Plan
-  - [ ] Purchase Goods
-  - [ ] Sell Goods
+  - [x] Find Asteroids
+  - [x] Create Flight Plan
+  - [x] View Flight Plan
+  - [x] Purchase Goods
+  - [x] Sell Goods
 - [ ] Use Moo to provide better console input
 - [ ] Improve output(not just stringified objects)
 - [ ] Use Ink to make it pretty
