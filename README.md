@@ -7,7 +7,7 @@ A command line app for interacting with [spacetraders](spacetraders.io)
 ## Usage
 
 - Install [deno](https://deno.land/)
-- `deno run --unstable --allow-net index.ts`
+- Install this app: `deno install --allow-net --allow-read -n space-traders https://github.com/trescenzi/deno-space-traders`
 
 ## Todo
 
